@@ -138,8 +138,7 @@ def parse_character(data: typing.Mapping) -> typing.Mapping:
         **parse_images(data['image']),
     }
 
-
-def parse_episode(data):
+def parse_episode(data: typing.Mapping) -> typing.Mapping:
     """Parse a TVMaze character.
 
     :param data: Character data from TVMaze
