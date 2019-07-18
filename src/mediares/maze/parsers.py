@@ -122,3 +122,18 @@ def parse_person(data: typing.Mapping) -> typing.Mapping:
         'api_url': parse_link(data['_links'], 'self'),
         **parse_images(data['image']),
     }
+
+
+def parse_character(data: typing.Mapping) -> typing.Mapping:
+    """Parse a TVMaze character.
+
+    :param data: Character data from TVMaze
+    :return: A mapping containing parsed character data
+    """
+    return {
+        'maze_id': data['id'],
+        'name': data['name'],
+        'web_url': data['url'],
+        'api_url': parse_link(data['_links'], 'self'),
+        **parse_images(data['image']),
+    }
