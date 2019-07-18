@@ -1,6 +1,3 @@
-import datetime
-
-import pycountry
 import pytest
 import validators
 
