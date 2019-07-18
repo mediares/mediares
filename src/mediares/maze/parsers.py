@@ -138,11 +138,12 @@ def parse_character(data: typing.Mapping) -> typing.Mapping:
         **parse_images(data['image']),
     }
 
-def parse_episode(data: typing.Mapping) -> typing.Mapping:
-    """Parse a TVMaze character.
 
-    :param data: Character data from TVMaze
-    :return: A mapping containing parsed character data
+def parse_episode(data: typing.Mapping) -> typing.Mapping:
+    """Parse a TVMaze episode.
+
+    :param data: Episode data from TVMaze
+    :return: A mapping containing parsed episode data
     """
     date_fmt = '%Y-%m-%d'
     time_fmt = '%H:%M'
