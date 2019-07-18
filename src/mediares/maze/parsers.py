@@ -137,3 +137,39 @@ def parse_character(data: typing.Mapping) -> typing.Mapping:
         'api_url': parse_link(data['_links'], 'self'),
         **parse_images(data['image']),
     }
+
+
+def parse_episode(data):
+    """Parse a TVMaze character.
+
+    :param data: Character data from TVMaze
+    :return: A mapping containing parsed character data
+    """
+    date_fmt = '%Y-%m-%d'
+    time_fmt = '%H:%M'
+    datetime_fmt = '%Y-%m-%dT%H:%M:%S%z'
+
+    airdate = datetime.datetime.strptime(data['airdate'], date_fmt)
+    airdate = airdate.date()
+
+    airtime = datetime.datetime.strptime(data['airtime'], time_fmt)
+    airtime = airtime.time()
+
+    timestamp = datetime.datetime.strptime(data['airstamp'], datetime_fmt)
+
+    return {
+        'maze_id': data['id'],
+        'title': data['name'],
+        'order': (data['season'], data['number']),
+
+        'air_date': airdate,
+        'air_time': airtime,
+        'airs': timestamp,
+        'runtime': datetime.timedelta(minutes=data['runtime']),
+
+        'summary': data['summary'],
+
+        'api_url': parse_link(data['_links'], 'self'),
+        'web_url': data['url'],
+        **parse_images(data['image']),
+    }
