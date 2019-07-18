@@ -31,6 +31,14 @@ def parse_country(data: typing.Optional[typing.Mapping]) -> typing.Mapping:
     by_code = pycountry.countries.get(alpha_2=code)
     log.debug(f'Country code {code!r} parses as: {by_code}')
 
+    name = data['name']
+
+    by_name = pycountry.countries.get(name=name)
+    log.debug(f'Country name {name!r} parses as: {by_name}')
+
+    if by_code != by_name:
+        raise ValueError(f'country is ambiguous: {by_code} != {by_name}')
+
     return {
         'country': by_code,
         'timezone': timezone,
