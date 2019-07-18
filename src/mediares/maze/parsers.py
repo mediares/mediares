@@ -1,10 +1,13 @@
 """Parse data from TVMaze."""
 
+import datetime
 import logging
 import typing
 
 import dateutil.tz
 import pycountry
+
+import mediares.constants
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -67,3 +70,55 @@ def parse_web_channel(data: typing.Mapping) -> typing.Mapping:
     :return: A mapping containing parsed network data
     """
     return parse_network(data)
+
+
+def parse_images(data: typing.Mapping) -> typing.Mapping:
+    """Parse TVMaze image urls.
+
+    :param data: Image data from TVMaze
+    :return: A mapping containing parsed image urls
+    """
+    return {
+        'medium_image_url': data['medium'],
+        'original_image_url': data['original'],
+    }
+
+
+def parse_link(data, key):
+    """Parse a TVMaze link.
+
+    :param data: Link data from TVMaze
+    :param key: The desired link name
+    :return: A url
+    """
+    return data[key]['href']
+
+
+def parse_person(data: typing.Mapping) -> typing.Mapping:
+    """Parse a TVMaze person.
+
+    :param data: Person data from TVMaze
+    :return: A mapping containing parsed person data
+    """
+    date_fmt = '%Y-%m-%d'
+
+    birth = datetime.datetime.strptime(data['birthday'], date_fmt)
+    birth = birth.date()
+
+    if data['deathday']:
+        death = datetime.datetime.strptime(data['deathday'], date_fmt)
+        death = death.date()
+    else:
+        death = None
+
+    return {
+        'maze_id': data['id'],
+        'name': data['name'],
+        **parse_country(data['country']),
+        'birth': birth,
+        'death': death,
+        'gender': mediares.constants.Gender[data['gender'].upper()],
+        'web_url': data['url'],
+        'api_url': parse_link(data['_links'], 'self'),
+        **parse_images(data['image']),
+    }
