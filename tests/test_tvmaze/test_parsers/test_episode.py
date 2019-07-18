@@ -1,4 +1,3 @@
-import pycountry.db
 import datetime
 import collections.abc
 
