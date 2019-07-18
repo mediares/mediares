@@ -14,6 +14,17 @@ import mediares.maze.parsers
             'name': 'United States',
             'timezone': 'America/New_York',
         },
+        pytest.param(
+            {
+                'code': 'US',
+                'name': 'Brazil',
+                'timezone': 'America/New_York',
+            },
+            marks=pytest.mark.xfail(
+                raises=ValueError,
+                reason='Code and name do not parse equal',
+            ),
+        ),
     ],
 )
 def test_parse_network(data):
