@@ -173,3 +173,46 @@ def parse_episode(data: typing.Mapping) -> typing.Mapping:
         'web_url': data['url'],
         **parse_images(data['image']),
     }
+
+
+def parse_season(data: typing.Mapping) -> typing.Mapping:
+    """Parse a TVMaze season.
+
+    :param data: Season data from TVMaze
+    :return: A mapping containing parsed season data
+    """
+    date_fmt = '%Y-%m-%d'
+
+    start_date = datetime.datetime.strptime(data['premiereDate'], date_fmt)
+    start_date = start_date.date()
+
+    end_date = datetime.datetime.strptime(data['endDate'], date_fmt)
+    end_date = end_date.date()
+
+    network = data['network']
+    if network:
+        network = parse_network(network)
+
+    web_channel = data['webChannel']
+    if web_channel:
+        web_channel = parse_web_channel(web_channel)
+
+    return {
+        'maze_id': data['id'],
+        'season_number': data['number'],
+        'title': data['name'],
+
+        'episodes_ordered': data['episodeOrder'],
+
+        'start_date': start_date,
+        'end_date': end_date,
+
+        'network': network,
+        'web_channel': web_channel,
+
+        'summary': data['summary'] or '',
+
+        'api_url': parse_link(data['_links'], 'self'),
+        'web_url': data['url'],
+        **parse_images(data['image']),
+    }
