@@ -216,3 +216,19 @@ def parse_season(data: typing.Mapping) -> typing.Mapping:
         'web_url': data['url'],
         **parse_images(data['image']),
     }
+
+
+def parse_updates(data):
+    """Parse TVMaze series updates.
+
+    :param data: Series update data from TVMaze
+    :return: A mapping containing parsed series updates
+    """
+    def _timestamp(value):
+        timestamp = datetime.datetime.utcfromtimestamp(value)
+        return timestamp.replace(tzinfo=datetime.timezone.utc)
+
+    return {
+        int(key): _timestamp(value)
+        for key, value in data.items()
+    }
